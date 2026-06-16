@@ -1,0 +1,19 @@
+# Compilation Maven
+**/target/
+*.target
+
+# Fichiers de configuration de l'IDE (VS Code, Eclipse, IntelliJ)
+.settings/
+.project
+.classpath
+*.factorypath
+.idea/
+*.iml
+.vscode/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
