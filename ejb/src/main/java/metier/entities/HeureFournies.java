@@ -5,48 +5,55 @@ import java.util.Date;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "HeureFournies")
+@Table(name = "HeureFournie") 
 public class HeureFournies implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; 
+    @Column(name = "heure_fournie_code")
+    private Long heureFournieCode;
 
-    private String code; 
+    @ManyToOne
+    @JoinColumn(name = "employe_code", nullable = false)
+    private Employe employe;
 
+    // Protection contre le mot-clé réservé SQL 'date'
     @Temporal(TemporalType.DATE)
-    private Date date; 
+    @Column(name = "date_travail", nullable = false)
+    private Date date;
 
     @Temporal(TemporalType.TIME)
-    private Date heure_debut; 
+    @Column(name = "heure_debut", nullable = false)
+    private Date heureDebut;
 
     @Temporal(TemporalType.TIME)
-    private Date heure_fin; 
+    @Column(name = "heure_fin", nullable = false)
+    private Date heureFin;
 
     // Constructeurs
     public HeureFournies() {}
 
-    public HeureFournies(String code, Date date, Date heure_debut, Date heure_fin) {
-        this.code = code;
+    public HeureFournies(Employe employe, Date date, Date heureDebut, Date heureFin) {
+        this.employe = employe;
         this.date = date;
-        this.heure_debut = heure_debut;
-        this.heure_fin = heure_fin;
+        this.heureDebut = heureDebut;
+        this.heureFin = heureFin;
     }
 
     // Getters et Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getHeureFournieCode() { return heureFournieCode; }
+    public void setHeureFournieCode(Long heureFournieCode) { this.heureFournieCode = heureFournieCode; }
 
-    public String getCode() { return code; }
-    public void setCode(String code) { this.code = code; }
+    public Employe getEmploye() { return employe; }
+    public void setEmploye(Employe employe) { this.employe = employe; }
 
     public Date getDate() { return date; }
     public void setDate(Date date) { this.date = date; }
 
-    public Date getHeure_debut() { return heure_debut; }
-    public void setHeure_debut(Date heure_debut) { this.heure_debut = heure_debut; }
+    public Date getHeureDebut() { return heureDebut; }
+    public void setHeureDebut(Date heureDebut) { this.heureDebut = heureDebut; }
 
-    public Date getHeure_fin() { return heure_fin; }
-    public void setHeure_fin(Date heure_fin) { this.heure_fin = heure_fin; }
+    public Date getHeureFin() { return heureFin; }
+    public void setHeureFin(Date heureFin) { this.heureFin = heureFin; }
 }

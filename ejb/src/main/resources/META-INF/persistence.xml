@@ -27,6 +27,8 @@
       <class>metier.entities.Employe</class>
 		<class>metier.entities.Medecin</class>
 		<class>metier.entities.Patient</class>
+      <class>metier.entities.Consultation</class>
+      <class>metier.entities.JourFerie</class>
 		<class>metier.entities.HeureFournies</class>
 		<class>metier.entities.HeureMensuelle</class>
       <properties>

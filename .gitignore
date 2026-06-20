@@ -10,6 +10,7 @@
 .idea/
 *.iml
 .vscode/
+.claude/*
 
 # Fichiers système
 .DS_Store

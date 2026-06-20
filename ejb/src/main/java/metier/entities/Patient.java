@@ -4,37 +4,41 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Patients")
+@Table(name = "Patient")
 public class Patient implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "code")
-    private String code; // Identifiant unique (ex: PAT-001)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "patient_code")
+    private Long patientCode;
 
     private String nom;
     private String prenom;
+    private String adresse;
     private String telephone;
 
-    // Constructeurs
     public Patient() {}
 
-    public Patient(String code, String nom, String prenom, String telephone) {
-        this.code = code;
+    public Patient(String nom, String prenom, String adresse, String telephone) {
         this.nom = nom;
         this.prenom = prenom;
+        this.adresse = adresse;
         this.telephone = telephone;
     }
 
     // Getters et Setters
-    public String getCode() { return code; }
-    public void setCode(String code) { this.code = code; }
+    public Long getPatientCode() { return patientCode; }
+    public void setPatientCode(Long patientCode) { this.patientCode = patientCode; }
 
     public String getNom() { return nom; }
     public void setNom(String nom) { this.nom = nom; }
 
     public String getPrenom() { return prenom; }
     public void setPrenom(String prenom) { this.prenom = prenom; }
+
+    public String getAdresse() { return adresse; }
+    public void setAdresse(String adresse) { this.adresse = adresse; }
 
     public String getTelephone() { return telephone; }
     public void setTelephone(String telephone) { this.telephone = telephone; }

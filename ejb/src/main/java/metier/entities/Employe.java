@@ -4,24 +4,26 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Employes")
+@Table(name = "Employe")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Employe implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "code")
-    private String code; // Identifiant unique (ex: EMP-001)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "employe_code")
+    private Long employeCode;
 
     private String nom;
     private String prenom;
     private String poste;
-    private double salaireBase; // Nécessaire pour afficher le payroll des employés
+    
+    @Column(name = "salaire_base")
+    private double salaireBase; 
 
-    // Constructeurs
     public Employe() {}
 
-    public Employe(String code, String nom, String prenom, String poste, double salaireBase) {
-        this.code = code;
+    public Employe(String nom, String prenom, String poste, double salaireBase) {
         this.nom = nom;
         this.prenom = prenom;
         this.poste = poste;
@@ -29,8 +31,8 @@ public class Employe implements Serializable {
     }
 
     // Getters et Setters
-    public String getCode() { return code; }
-    public void setCode(String code) { this.code = code; }
+    public Long getEmployeCode() { return employeCode; }
+    public void setEmployeCode(Long employeCode) { this.employeCode = employeCode; }
 
     public String getNom() { return nom; }
     public void setNom(String nom) { this.nom = nom; }

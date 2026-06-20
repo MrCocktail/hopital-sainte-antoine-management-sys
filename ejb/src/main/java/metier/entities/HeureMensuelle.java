@@ -10,29 +10,38 @@ public class HeureMensuelle implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "heure_mensuelle_code")
+    private Long heureMensuelleCode;
 
-    private String code; // Code du médecin concerné 
-    private int mois;    // Ex: 6 pour Juin
-    private int annee;   // Ex: 2026
-    private double nb_heure; // Total des heures calculées pour ce mois 
+    @ManyToOne
+    @JoinColumn(name = "employe_code", nullable = false)
+    private Employe employe;
 
-    // Constructeurs
+    private int mois;    
+    private int annee;   
+    
+    @Column(name = "total_heures")
+    private double totalHeures; 
+
+    @Column(name = "salaire_brut_historique")
+    private double salaireBrutHistorique; 
+
     public HeureMensuelle() {}
 
-    public HeureMensuelle(String code, int mois, int annee, double nb_heure) {
-        this.code = code;
+    public HeureMensuelle(Employe employe, int mois, int annee, double totalHeures, double salaireBrutHistorique) {
+        this.employe = employe;
         this.mois = mois;
         this.annee = annee;
-        this.nb_heure = nb_heure;
+        this.totalHeures = totalHeures;
+        this.salaireBrutHistorique = salaireBrutHistorique;
     }
 
     // Getters et Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getHeureMensuelleCode() { return heureMensuelleCode; }
+    public void setHeureMensuelleCode(Long heureMensuelleCode) { this.heureMensuelleCode = heureMensuelleCode; }
 
-    public String getCode() { return code; }
-    public void setCode(String code) { this.code = code; }
+    public Employe getEmploye() { return employe; }
+    public void setEmploye(Employe employe) { this.employe = employe; }
 
     public int getMois() { return mois; }
     public void setMois(int mois) { this.mois = mois; }
@@ -40,6 +49,9 @@ public class HeureMensuelle implements Serializable {
     public int getAnnee() { return annee; }
     public void setAnnee(int annee) { this.annee = annee; }
 
-    public double getNb_heure() { return nb_heure; }
-    public void setNb_heure(double nb_heure) { this.nb_heure = nb_heure; }
+    public double getTotalHeures() { return totalHeures; }
+    public void setTotalHeures(double totalHeures) { this.totalHeures = totalHeures; }
+
+    public double getSalaireBrutHistorique() { return salaireBrutHistorique; }
+    public void setSalaireBrutHistorique(double salaireBrutHistorique) { this.salaireBrutHistorique = salaireBrutHistorique; }
 }
