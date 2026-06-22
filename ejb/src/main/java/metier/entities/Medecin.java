@@ -12,8 +12,8 @@ public class Medecin extends Employe {
 
     public Medecin() {}
 
-    public Medecin(String nom, String prenom, String poste, double salaireBase, String specialite) {
-        super(nom, prenom, poste, salaireBase);
+    public Medecin(String nom, String prenom, String adresse, String telephone, String poste, double salaireBase, String specialite) {
+        super(nom, prenom, adresse, telephone, poste, salaireBase);
         this.specialite = specialite;
     }
 

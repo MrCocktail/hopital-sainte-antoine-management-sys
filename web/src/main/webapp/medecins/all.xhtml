@@ -1,63 +1,62 @@
-<ui:composition 
-    xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="http://xmlns.jcp.org/jsf/html"
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
-    <f:event type="preRenderView" listener="#{patientBean.rafraichirListe()}" />
+    <f:event type="preRenderView" listener="#{medecinBean.rafraichirListe()}" />
 
     <div class="space-y-6">
         <div class="flex justify-between items-center bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
             <div class="flex items-center gap-3">
-                <h2 class="text-xl font-bold text-slate-700">Tous les Patients</h2>
-                <h:form id="addViewPatientForm">
-                    <h:commandLink action="#{navigationBean.changerVue('patients-add')}" 
+                <h2 class="text-xl font-bold text-slate-700">Tous les Médecins</h2>
+                <h:form id="addViewMedForm">
+                    <h:commandLink action="#{navigationBean.changerVue('medecins-add')}" 
                                    styleClass="flex items-center justify-center w-8 h-8 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-sm transition group"
-                                   title="Ajouter un patient">
+                                   title="Ajouter un médecin">
                         <span class="material-icons text-lg group-hover:scale-110 transition-transform">add</span>
                     </h:commandLink>
                 </h:form>
             </div>
-            
-            <h:form id="searchPatientForm">
+
+            <h:form id="searchMedForm">
                 <div class="flex gap-2">
-                    <h:inputText value="#{patientBean.searchTerm}" 
+                    <h:inputText value="#{medecinBean.searchTerm}" 
                                  styleClass="text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none w-64 transition" 
-                                 placeholder="Rechercher un patient..."/>
-                    <h:commandButton action="#{patientBean.rechercher}" 
+                                 placeholder="Rechercher un médecin..."/>
+                    <h:commandButton action="#{medecinBean.rechercher}" 
                                      value="Rechercher" 
                                      styleClass="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition shadow-sm"/>
                 </div>
             </h:form>
         </div>
 
-    <h:form id="patientsForm">
+    <h:form id="medecinsForm">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <ui:repeat value="#{patientBean.listePatients}" var="p">
-                <ui:fragment rendered="#{p != null}">
+            <ui:repeat value="#{medecinBean.listeMedecins}" var="m">
+                <ui:fragment rendered="#{m != null}">
                     <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col items-center p-6 relative">
                         
                         <div class="w-24 h-24 bg-gradient-to-tr from-blue-500 to-teal-400 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-md mb-4">
-                            #{p.prenom.substring(0,1)}#{p.nom.substring(0,1)}
+                            #{m.prenom.substring(0,1)}#{m.nom.substring(0,1)}
                         </div>
 
-                        <h4 class="text-lg font-bold text-slate-800 text-center">#{p.prenom} #{p.nom}</h4>
-                        <p class="text-xs text-blue-600 font-medium bg-blue-50 px-2.5 py-1 rounded-full mt-1">Patient Répertorié</p>
+                        <h4 class="text-lg font-bold text-slate-800 text-center">#{m.prenom} #{m.nom}</h4>
+                        <p class="text-xs text-blue-600 font-medium bg-blue-50 px-2.5 py-1 rounded-full mt-1">#{m.specialite}</p>
                         
                         <div class="w-full border-t border-slate-100 my-4 pt-3 text-center space-y-1">
                             <p class="text-xs text-slate-500 flex items-center justify-center gap-1">
-                                <span class="material-icons text-sm text-slate-400">phone</span> #{p.telephone}
+                                <span class="material-icons text-sm text-slate-400">phone</span> #{m.telephone}
                             </p>
                             <p class="text-xs text-slate-400 flex items-center justify-center gap-1 truncate px-2">
-                                <span class="material-icons text-sm text-slate-400">place</span> #{p.adresse}
+                                <span class="material-icons text-sm text-slate-400">place</span> #{m.adresse}
                             </p>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3 w-full mt-2">
-                            <h:commandLink action="#{patientBean.preparerEdition(p)}" styleClass="flex items-center justify-center gap-1 text-xs bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-600 py-2 rounded-lg font-semibold transition w-full">
+                            <h:commandLink action="#{medecinBean.preparerEdition(m)}" styleClass="flex items-center justify-center gap-1 text-xs bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-600 py-2 rounded-lg font-semibold transition w-full">
                                 <span class="material-icons text-sm">edit</span> Éditer
                             </h:commandLink>
-                            <h:commandLink action="#{patientBean.supprimerPatient(p)}" styleClass="flex items-center justify-center gap-1 text-xs bg-red-50 hover:bg-red-600 hover:text-white text-red-600 py-2 rounded-lg font-semibold transition w-full">
+                            <h:commandLink action="#{medecinBean.supprimerMedecin(m)}" styleClass="flex items-center justify-center gap-1 text-xs bg-red-50 hover:bg-red-600 hover:text-white text-red-600 py-2 rounded-lg font-semibold transition w-full">
                                 <span class="material-icons text-sm">delete</span> Supprimer
                             </h:commandLink>
                         </div>

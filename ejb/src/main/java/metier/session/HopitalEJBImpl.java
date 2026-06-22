@@ -13,6 +13,7 @@ import metier.entities.Employe;
 import metier.entities.HeureFournies;
 import metier.entities.HeureMensuelle;
 import metier.entities.Patient;
+import metier.entities.Medecin;
 
 @Stateless(name = "HopitalEJB")
 public class HopitalEJBImpl implements IHopitalLocal {
@@ -54,6 +55,43 @@ public class HopitalEJBImpl implements IHopitalLocal {
         Patient p = em.find(Patient.class, code);
         if (p != null) {
             em.remove(p);
+        }
+    }
+
+    @Override
+    public List<Medecin> listeTousLesMedecins() {
+        return em.createQuery("SELECT m FROM Medecin m", Medecin.class).getResultList();
+    }
+
+    @Override
+    public List<Medecin> rechercheMedecins(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return listeTousLesMedecins();
+        }
+        return em.createQuery(
+            "SELECT m FROM Medecin m WHERE LOWER(m.nom) LIKE LOWER(:query) OR LOWER(m.prenom) LIKE LOWER(:query)", 
+            Medecin.class)
+            .setParameter("query", "%" + query + "%")
+            .getResultList();
+    }
+
+    @Override
+    public void ajouterMedecin(Medecin m) {
+        em.persist(m);
+    }
+
+    @Override
+    public void modifierMedecin(Medecin m) {
+        if (m != null) {
+            em.merge(m);
+        }
+    }
+
+    @Override
+    public void supprimerMedecin(Long code) {
+        Medecin m = em.find(Medecin.class, code);
+        if (m != null) {
+            em.remove(m);
         }
     }
 

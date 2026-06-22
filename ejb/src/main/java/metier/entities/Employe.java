@@ -16,6 +16,8 @@ public class Employe implements Serializable {
 
     private String nom;
     private String prenom;
+    private String adresse;
+    private String telephone;
     private String poste;
     
     @Column(name = "salaire_base")
@@ -23,9 +25,11 @@ public class Employe implements Serializable {
 
     public Employe() {}
 
-    public Employe(String nom, String prenom, String poste, double salaireBase) {
+    public Employe(String nom, String prenom, String adresse, String telephone, String poste, double salaireBase) {
         this.nom = nom;
         this.prenom = prenom;
+        this.adresse = adresse;
+        this.telephone = telephone;
         this.poste = poste;
         this.salaireBase = salaireBase;
     }
@@ -39,6 +43,12 @@ public class Employe implements Serializable {
 
     public String getPrenom() { return prenom; }
     public void setPrenom(String prenom) { this.prenom = prenom; }
+
+    public String getAdresse() { return adresse; }
+    public void setAdresse(String adresse) { this.adresse = adresse; }
+
+    public String getTelephone() { return telephone; }
+    public void setTelephone(String telephone) { this.telephone = telephone; }
 
     public String getPoste() { return poste; }
     public void setPoste(String poste) { this.poste = poste; }

@@ -12,24 +12,24 @@ TRUNCATE TABLE JourFerie;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- 1. Insertion des Employés administratifs et infirmiers (Table Mère 'Employe')
-INSERT INTO Employe (employe_code, nom, prenom, poste, salaire_base) VALUES 
-(1, 'Chery', 'Jean-Baptiste', 'Secrétaire Médical', 250.00),
-(2, 'Augustin', 'Dieufort', 'Comptable', 400.00),
-(3, 'Jean-Louis', 'Marline', 'Infirmière Choc', 300.00),
-(4, 'Destiné', 'Florence', 'Infirmière Anesthésiste', 350.00),
-(5, 'Pierre', 'Lovenson', 'Technicien de Laboratoire', 280.00);
+INSERT INTO Employe (employe_code, nom, prenom, adresse, telephone, poste, salaire_base) VALUES 
+(1, 'Chery', 'Jean-Baptiste', '123 Rue de la Paix', '+509 2222-2222', 'Secrétaire Médical', 250.00),
+(2, 'Augustin', 'Dieufort', '456 Avenue des Champs-Élysées', '+509 3333-3333', 'Comptable', 400.00),
+(3, 'Jean-Louis', 'Marline', '789 Boulevard Saint-Germain', '+509 4444-4444', 'Infirmière Choc', 300.00),
+(4, 'Destiné', 'Florence', '101 Rue de Rivoli', '+509 5555-5555', 'Infirmière Anesthésiste', 350.00),
+(5, 'Pierre', 'Lovenson', '202 Avenue des Champs-Élysées', '+509 6666-6666', 'Technicien de Laboratoire', 280.00);
 
 -- 2. Insertion des Médecins (Héritage JOINED : Insertion dans 'Employe' puis dans 'Medecin')
 -- Dr. Frantz Dominique
-INSERT INTO Employe (employe_code, nom, prenom, poste, salaire_base) VALUES (6, 'Dominique', 'Frantz', 'Médecin spécialiste', 600.00);
+INSERT INTO Employe (employe_code, nom, prenom, adresse, telephone, poste, salaire_base) VALUES (6, 'Dominique', 'Frantz', '678 Rue de la Paix', '+509 7777-7777', 'Médecin spécialiste', 600.00);
 INSERT INTO Medecin (employe_code, specialite) VALUES (6, 'Pédiatrie');
 
 -- Dre. Claudette Noël
-INSERT INTO Employe (employe_code, nom, prenom, poste, salaire_base) VALUES (7, 'Noël', 'Claudette', 'Médecin spécialiste', 650.00);
+INSERT INTO Employe (employe_code, nom, prenom, adresse, telephone, poste, salaire_base) VALUES (7, 'Noël', 'Claudette', '901 Avenue des Champs-Élysées', '+509 8888-8888', 'Médecin spécialiste', 650.00);
 INSERT INTO Medecin (employe_code, specialite) VALUES (7, 'Gynécologie-Obstétrique');
 
 -- Dr. Stevenson Alexandre
-INSERT INTO Employe (employe_code, nom, prenom, poste, salaire_base) VALUES (8, 'Alexandre', 'Stevenson', 'Médecin résident', 450.00);
+INSERT INTO Employe (employe_code, nom, prenom, adresse, telephone, poste, salaire_base) VALUES (8, 'Alexandre', 'Stevenson', '303 Rue de la Paix', '+509 9999-9999', 'Médecin résident', 450.00);
 INSERT INTO Medecin (employe_code, specialite) VALUES (8, 'Chirurgie Générale');
 
 

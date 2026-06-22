@@ -66,6 +66,14 @@
                                          styleClass="nav-btn #{navigationBean.vueActive == 'patients-all' ? 'text-blue-600 font-bold' : 'text-slate-600'} transition" />
                     </div>
 
+                    <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm #{navigationBean.vueActive == 'medecins-all' ? 'bg-blue-50' : 'hover:bg-slate-50'}">
+                        <span class="material-icons text-xl #{navigationBean.vueActive == 'medecins-all' ? 'text-blue-600' : 'text-slate-600'}">medical_services</span>
+                        <h:commandButton value="Médecins"
+                                         action="#{navigationBean.changerVue('medecins-all')}"
+                                         immediate="true"
+                                         styleClass="nav-btn #{navigationBean.vueActive == 'medecins-all' ? 'text-blue-600 font-bold' : 'text-slate-600'} transition" />
+                    </div>
+
                     <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm #{navigationBean.vueActive == 'employees' ? 'bg-blue-50' : 'hover:bg-slate-50'}">
                         <span class="material-icons text-xl #{navigationBean.vueActive == 'employees' ? 'text-blue-600' : 'text-slate-600'}">badge</span>
                         <h:commandButton value="Employés &amp; Médecins"
@@ -120,6 +128,15 @@
                     </h:panelGroup>
                     <h:panelGroup layout="block" rendered="#{navigationBean.vueActive == 'patients-edit'}">
                         <ui:include src="/patients/edit.xhtml" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" rendered="#{navigationBean.vueActive == 'medecins-all'}">
+                        <ui:include src="/medecins/all.xhtml" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" rendered="#{navigationBean.vueActive == 'medecins-add'}">
+                        <ui:include src="/medecins/add.xhtml" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" rendered="#{navigationBean.vueActive == 'medecins-edit'}">
+                        <ui:include src="/medecins/edit.xhtml" />
                     </h:panelGroup>
                 </h:panelGroup>
             </main>
