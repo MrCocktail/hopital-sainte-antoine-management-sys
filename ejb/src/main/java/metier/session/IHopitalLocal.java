@@ -15,6 +15,7 @@ public interface IHopitalLocal {
 
     // Gestion des Patients
     List<Patient> listeTousLesPatients();
+    List<Patient> recherchePatients(String query);
     void ajouterPatient(Patient p);
     void modifierPatient(Patient p);
     void supprimerPatient(Long code);

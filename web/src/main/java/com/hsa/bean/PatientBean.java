@@ -25,6 +25,7 @@ public class PatientBean implements Serializable {
     // Propriétés pour le formulaire
     private Patient nouveauPatient = new Patient();
     private Patient patientSelectionne = new Patient();
+    private String searchTerm = "";
     private List<Patient> listePatients = new ArrayList<>();
 
     @PostConstruct
@@ -33,10 +34,18 @@ public class PatientBean implements Serializable {
     }
 
     public void rafraichirListe() {
-        listePatients = hopitalEJB.listeTousLesPatients();
+        if (searchTerm == null || searchTerm.trim().isEmpty()) {
+            listePatients = hopitalEJB.listeTousLesPatients();
+        } else {
+            listePatients = hopitalEJB.recherchePatients(searchTerm);
+        }
     }
 
     public void rafraichirListe(ComponentSystemEvent event) {
+        rafraichirListe();
+    }
+
+    public void rechercher() {
         rafraichirListe();
     }
 
@@ -73,4 +82,7 @@ public class PatientBean implements Serializable {
     public Patient getPatientSelectionne() { return patientSelectionne; }
     public void setPatientSelectionne(Patient patientSelectionne) { this.patientSelectionne = patientSelectionne; }
     public List<Patient> getListePatients() { return listePatients; }
+
+    public String getSearchTerm() { return searchTerm; }
+    public void setSearchTerm(String searchTerm) { this.searchTerm = searchTerm; }
 }

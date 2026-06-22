@@ -58,34 +58,13 @@
                                          styleClass="nav-btn #{navigationBean.vueActive == 'dashboard' ? 'text-blue-600 font-bold' : 'text-slate-600'} transition" />
                     </div>
 
-                    <div class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-slate-50">
-                        <div class="flex items-center gap-3">
-                            <span class="material-icons text-xl text-slate-600">people</span>
-                            <h:commandButton value="Patients"
-                                             action="#{navigationBean.toggleMenu('patients')}"
-                                             immediate="true"
-                                             styleClass="nav-btn text-slate-600 font-medium transition" />
-                        </div>
-                        <span class="text-xs text-slate-400">
-                            #{navigationBean.menuOuvert == 'patients' ? '▲' : '▼'}
-                        </span>
-                    </div>
-
-                    <h:panelGroup layout="block" rendered="#{navigationBean.menuOuvert == 'patients'}"
-                                  styleClass="pl-9 pr-2 py-1 space-y-1 bg-slate-50 rounded-lg">
-                        <h:commandButton value="• Lister les Patients"
+                    <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm #{navigationBean.vueActive == 'patients-all' ? 'bg-blue-50' : 'hover:bg-slate-50'}">
+                        <span class="material-icons text-xl #{navigationBean.vueActive == 'patients-all' ? 'text-blue-600' : 'text-slate-600'}">people</span>
+                        <h:commandButton value="Patients"
                                          action="#{navigationBean.changerVue('patients-all')}"
                                          immediate="true"
-                                         styleClass="nav-btn-sub py-2 text-xs font-medium #{navigationBean.vueActive == 'patients-all' ? 'text-blue-600 font-bold' : 'text-slate-500 hover:text-slate-800'}" />
-                        <h:commandButton value="• Ajouter un Patient"
-                                         action="#{navigationBean.changerVue('patients-add')}"
-                                         immediate="true"
-                                         styleClass="nav-btn-sub py-2 text-xs font-medium #{navigationBean.vueActive == 'patients-add' ? 'text-blue-600 font-bold' : 'text-slate-500 hover:text-slate-800'}" />
-                        <h:commandButton value="• Modifier un Patient"
-                                         action="#{navigationBean.changerVue('patients-edit')}"
-                                         immediate="true"
-                                         styleClass="nav-btn-sub py-2 text-xs font-medium #{navigationBean.vueActive == 'patients-edit' ? 'text-blue-600 font-bold' : 'text-slate-500 hover:text-slate-800'}" />
-                    </h:panelGroup>
+                                         styleClass="nav-btn #{navigationBean.vueActive == 'patients-all' ? 'text-blue-600 font-bold' : 'text-slate-600'} transition" />
+                    </div>
 
                     <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm #{navigationBean.vueActive == 'employees' ? 'bg-blue-50' : 'hover:bg-slate-50'}">
                         <span class="material-icons text-xl #{navigationBean.vueActive == 'employees' ? 'text-blue-600' : 'text-slate-600'}">badge</span>

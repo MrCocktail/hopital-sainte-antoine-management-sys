@@ -8,8 +8,27 @@
 
     <div class="space-y-6">
         <div class="flex justify-between items-center bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-            <h2 class="text-xl font-bold text-slate-700">Tous les Patients</h2>
-            <span class="text-sm text-slate-400 font-medium">Avenue Poupelard, Port-au-Prince</span>
+            <div class="flex items-center gap-3">
+                <h2 class="text-xl font-bold text-slate-700">Tous les Patients</h2>
+                <h:form id="addViewForm">
+                    <h:commandLink action="#{navigationBean.changerVue('patients-add')}" 
+                                   styleClass="flex items-center justify-center w-8 h-8 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-sm transition group"
+                                   title="Ajouter un patient">
+                        <span class="material-icons text-lg group-hover:scale-110 transition-transform">add</span>
+                    </h:commandLink>
+                </h:form>
+            </div>
+            
+            <h:form id="searchForm">
+                <div class="flex gap-2">
+                    <h:inputText value="#{patientBean.searchTerm}" 
+                                 styleClass="text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none w-64 transition" 
+                                 placeholder="Rechercher un patient..."/>
+                    <h:commandButton action="#{patientBean.rechercher}" 
+                                     value="Rechercher" 
+                                     styleClass="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition shadow-sm"/>
+                </div>
+            </h:form>
         </div>
 
     <h:form id="patientsForm">

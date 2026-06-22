@@ -26,6 +26,18 @@ public class HopitalEJBImpl implements IHopitalLocal {
     }
 
     @Override
+    public List<Patient> recherchePatients(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return listeTousLesPatients();
+        }
+        return em.createQuery(
+            "SELECT p FROM Patient p WHERE LOWER(p.nom) LIKE LOWER(:query) OR LOWER(p.prenom) LIKE LOWER(:query)", 
+            Patient.class)
+            .setParameter("query", "%" + query + "%")
+            .getResultList();
+    }
+
+    @Override
     public void ajouterPatient(Patient p) {
         em.persist(p);
     }
