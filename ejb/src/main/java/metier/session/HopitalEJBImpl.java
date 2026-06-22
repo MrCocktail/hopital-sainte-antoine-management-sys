@@ -12,12 +12,38 @@ import jakarta.persistence.TypedQuery;
 import metier.entities.Employe;
 import metier.entities.HeureFournies;
 import metier.entities.HeureMensuelle;
+import metier.entities.Patient;
 
 @Stateless(name = "HopitalEJB")
 public class HopitalEJBImpl implements IHopitalLocal {
 
     @PersistenceContext(unitName = "hsaPersistenceUnit")
     private EntityManager em;
+
+    @Override
+    public List<Patient> listeTousLesPatients() {
+        return em.createQuery("SELECT p FROM Patient p WHERE p.patientCode IS NOT NULL", Patient.class).getResultList();
+    }
+
+    @Override
+    public void ajouterPatient(Patient p) {
+        em.persist(p);
+    }
+
+    @Override
+    public void modifierPatient(Patient p) {
+        if (p != null) {
+            em.merge(p);
+        }
+    }
+
+    @Override
+    public void supprimerPatient(Long code) {
+        Patient p = em.find(Patient.class, code);
+        if (p != null) {
+            em.remove(p);
+        }
+    }
 
     @Override
     public void enregistrerHeuresQuotidiennes(Long employeCode, Date date, Date debut, Date fin) {

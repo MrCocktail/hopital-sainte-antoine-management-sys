@@ -1,73 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://jakarta.faces.html"
-      xmlns:f="http://jakarta.faces.core"
-      xmlns:ui="http://jakarta.faces.facelets">
+<!DOCTYPE html>
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 <h:head>
     <title>HSA - Medical Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <style type="text/css">
+        .nav-btn {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font: inherit;
+            padding: 0;
+        }
+        .nav-btn-sub {
+            display: block;
+            width: 100%;
+            text-align: left;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font: inherit;
+        }
+    </style>
 </h:head>
 
 <h:body style="margin:0; padding:0; background-color: #f8fafc;">
-    
+    <f:view>
     <div class="flex min-h-screen w-full">
-        
+
         <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0 min-h-screen">
-            
+
             <div class="h-16 flex items-center px-6 border-b border-slate-200 gap-2 bg-blue-600 text-white shrink-0">
                 <span class="material-icons">local_hospital</span>
                 <span class="text-lg font-bold tracking-wide">HSA DASHBOARD</span>
             </div>
-            
+
             <h:form id="navForm" style="margin:0; padding:0;" styleClass="flex-1 flex flex-col">
-                
+                <!-- The Command Button -->
+            <h:commandButton value="Submit Data" 
+                             action="#{userBean.submitAction}" 
+                             styleClass="btn-primary" />
+
                 <div class="flex-1 p-4 flex flex-col gap-2">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 mb-1">Main</p>
-                    
-                    <h:commandLink action="#{navigationBean.changerVue('dashboard')}" 
-                                   styleClass="flex items-center gap-3 px-3 py-2.5 #{navigationBean.vueActive == 'dashboard' ? 'bg-blue-50 text-blue-600 font-bold' : 'text-slate-600 hover:bg-slate-50'} rounded-lg text-sm transition cursor-pointer block w-full text-left">
-                        <span class="material-icons text-xl">dashboard</span>
-                        <span>Dashboard</span>
-                    </h:commandLink>
-                    
-                    <h:commandLink action="#{patientBean.basculerDropdown()}" 
-                                   styleClass="flex items-center justify-between px-3 py-2.5 text-slate-600 hover:bg-slate-50 rounded-lg font-medium text-sm transition cursor-pointer block w-full text-left">
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 mb-1">Menu</p>
+
+                    <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm #{navigationBean.vueActive == 'dashboard' ? 'bg-blue-50' : 'hover:bg-slate-50'}">
+                        <span class="material-icons text-xl #{navigationBean.vueActive == 'dashboard' ? 'text-blue-600' : 'text-slate-600'}">dashboard</span>
+                        <h:commandButton value="Dashboard"
+                                         action="#{navigationBean.changerVue('dashboard')}"
+                                         immediate="true"
+                                         styleClass="nav-btn #{navigationBean.vueActive == 'dashboard' ? 'text-blue-600 font-bold' : 'text-slate-600'} transition" />
+                    </div>
+
+                    <div class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-slate-50">
                         <div class="flex items-center gap-3">
-                            <span class="material-icons text-xl">people</span>
-                            <span>Patients</span>
+                            <span class="material-icons text-xl text-slate-600">people</span>
+                            <h:commandButton value="Patients"
+                                             action="#{navigationBean.toggleMenu('patients')}"
+                                             immediate="true"
+                                             styleClass="nav-btn text-slate-600 font-medium transition" />
                         </div>
                         <span class="text-xs text-slate-400">
-                            #{patientBean.dropdownOuvert ? '▲' : '▼'}
+                            #{navigationBean.menuOuvert == 'patients' ? '▲' : '▼'}
                         </span>
-                    </h:commandLink>
-                    
-                    <h:panelGroup rendered="#{patientBean.dropdownOuvert}" 
-                                  styleClass="pl-9 pr-2 py-1 space-y-1 block bg-slate-50 rounded-lg">
-                        <h:commandLink action="#{patientBean.changerVue('all')}" 
-                                       styleClass="block py-2 text-xs font-medium #{patientBean.vueActive == 'all' ? 'text-blue-600 font-bold' : 'text-slate-500 hover:text-slate-800'} cursor-pointer text-left w-full">
-                            • Liste des Patients
-                        </h:commandLink>
-                        <h:commandLink action="#{patientBean.changerVue('add')}" 
-                                       styleClass="block py-2 text-xs font-medium #{patientBean.vueActive == 'add' ? 'text-blue-600 font-bold' : 'text-slate-500 hover:text-slate-800'} cursor-pointer text-left w-full">
-                            • Ajouter un Patient
-                        </h:commandLink>
-                    </h:panelGroup>
-                    
-                    <h:commandLink action="#{patientBean.changerVue('employees')}" 
-                                   styleClass="flex items-center gap-3 px-3 py-2.5 #{patientBean.vueActive == 'employees' ? 'bg-blue-50 text-blue-600 font-bold' : 'text-slate-600 hover:bg-slate-50'} rounded-lg font-medium text-sm transition cursor-pointer block w-full text-left">
-                        <span class="material-icons text-xl">badge</span>
-                        <span>Employés &amp; Médecins</span>
-                    </h:commandLink>
+                    </div>
 
-                    <h:commandLink action="#{patientBean.changerVue('payroll')}" 
-                                   styleClass="flex items-center gap-3 px-3 py-2.5 #{patientBean.vueActive == 'payroll' ? 'bg-blue-50 text-blue-600 font-bold' : 'text-slate-600 hover:bg-slate-50'} rounded-lg font-medium text-sm transition cursor-pointer block w-full text-left">
-                        <span class="material-icons text-xl">payments</span>
-                        <span>Gestion Payroll</span>
-                    </h:commandLink>
+                    <h:panelGroup layout="block" rendered="#{navigationBean.menuOuvert == 'patients'}"
+                                  styleClass="pl-9 pr-2 py-1 space-y-1 bg-slate-50 rounded-lg">
+                        <h:commandButton value="• Lister les Patients"
+                                         action="#{navigationBean.changerVue('patients-all')}"
+                                         immediate="true"
+                                         styleClass="nav-btn-sub py-2 text-xs font-medium #{navigationBean.vueActive == 'patients-all' ? 'text-blue-600 font-bold' : 'text-slate-500 hover:text-slate-800'}" />
+                        <h:commandButton value="• Ajouter un Patient"
+                                         action="#{navigationBean.changerVue('patients-add')}"
+                                         immediate="true"
+                                         styleClass="nav-btn-sub py-2 text-xs font-medium #{navigationBean.vueActive == 'patients-add' ? 'text-blue-600 font-bold' : 'text-slate-500 hover:text-slate-800'}" />
+                        <h:commandButton value="• Modifier un Patient"
+                                         action="#{navigationBean.changerVue('patients-edit')}"
+                                         immediate="true"
+                                         styleClass="nav-btn-sub py-2 text-xs font-medium #{navigationBean.vueActive == 'patients-edit' ? 'text-blue-600 font-bold' : 'text-slate-500 hover:text-slate-800'}" />
+                    </h:panelGroup>
+
+                    <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm #{navigationBean.vueActive == 'employees' ? 'bg-blue-50' : 'hover:bg-slate-50'}">
+                        <span class="material-icons text-xl #{navigationBean.vueActive == 'employees' ? 'text-blue-600' : 'text-slate-600'}">badge</span>
+                        <h:commandButton value="Employés &amp; Médecins"
+                                         action="#{navigationBean.changerVue('employees')}"
+                                         immediate="true"
+                                         styleClass="nav-btn font-medium #{navigationBean.vueActive == 'employees' ? 'text-blue-600 font-bold' : 'text-slate-600'} transition" />
+                    </div>
+
+                    <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm #{navigationBean.vueActive == 'payroll' ? 'bg-blue-50' : 'hover:bg-slate-50'}">
+                        <span class="material-icons text-xl #{navigationBean.vueActive == 'payroll' ? 'text-blue-600' : 'text-slate-600'}">payments</span>
+                        <h:commandButton value="Gestion Payroll"
+                                         action="#{navigationBean.changerVue('payroll')}"
+                                         immediate="true"
+                                         styleClass="nav-btn font-medium #{navigationBean.vueActive == 'payroll' ? 'text-blue-600 font-bold' : 'text-slate-600'} transition" />
+                    </div>
                 </div>
             </h:form>
 
@@ -83,126 +117,35 @@
         </aside>
 
         <div class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
-            
+
             <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 shrink-0">
                 <div class="flex items-center gap-4">
                     <h2 class="text-lg font-bold text-slate-700">Hôpital Sainte-Antoine</h2>
                     <span class="px-2.5 py-1 text-xs font-semibold text-green-700 bg-green-50 border border-green-200 rounded-full">Serveur WildFly Actif</span>
                 </div>
                 <div class="text-sm text-slate-500 font-medium">
-                    Port-au-Prince, Haïti
+                    Ave. Poupelard, Port-au-Prince, Haïti
                 </div>
             </header>
 
             <main class="flex-1 p-8 space-y-8">
-                
-                <h:panelGroup rendered="#{patientBean.vueActive == 'dashboard'}">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-slate-400">Total Lits</p>
-                                <h3 class="text-2xl font-bold text-slate-700 mt-1">200</h3>
-                            </div>
-                            <span class="p-3 bg-blue-50 text-blue-600 rounded-lg material-icons">hotel</span>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-slate-400">Médecins Dispo.</p>
-                                <h3 class="text-2xl font-bold text-slate-700 mt-1">126</h3>
-                            </div>
-                            <span class="p-3 bg-cyan-50 text-cyan-600 rounded-lg material-icons">healing</span>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-slate-400">Fiches Validées</p>
-                                <h3 class="text-2xl font-bold text-slate-700 mt-1">3,743</h3>
-                            </div>
-                            <span class="p-3 bg-emerald-50 text-emerald-600 rounded-lg material-icons">receipt_long</span>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-slate-400">Ambulances</p>
-                                <h3 class="text-2xl font-bold text-slate-700 mt-1">36</h3>
-                            </div>
-                            <span class="p-3 bg-red-50 text-red-600 rounded-lg material-icons">airport_shuttle</span>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                            <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-4">
-                                <span class="material-icons text-blue-600">schedule</span>
-                                <h3 class="text-lg font-bold text-slate-700">Saisie Quotidienne des Temps</h3>
-                            </div>
-                            <h:form styleClass="space-y-4">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Code Employé / Médecin</label>
-                                    <h:inputText value="#{payrollBean.employeCode}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Date de Travail</label>
-                                    <h:inputText value="#{payrollBean.dateTravail}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <f:convertDateTime pattern="yyyy-MM-dd" type="date"/>
-                                    </h:inputText>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Heure d'Entrée</label>
-                                        <h:inputText value="#{payrollBean.heureDebut}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                            <f:convertDateTime pattern="HH:mm" type="time"/>
-                                        </h:inputText>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Heure de Sortie</label>
-                                        <h:inputText value="#{payrollBean.heureFin}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                            <f:convertDateTime pattern="HH:mm" type="time"/>
-                                        </h:inputText>
-                                    </div>
-                                </div>
-                                <h:commandButton value="Enregistrer la Journée" action="#{payrollBean.enregistrer()}" styleClass="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-sm cursor-pointer transition" />
-                            </h:form>
-                        </div>
-
-                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                            <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-4">
-                                <span class="material-icons text-emerald-600">monetization_on</span>
-                                <h3 class="text-lg font-bold text-slate-700">Clôture Mensuelle (Payroll)</h3>
-                            </div>
-                            <h:form styleClass="space-y-4">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Code de l'Employé</label>
-                                    <h:inputText value="#{payrollBean.empCodeCalcul}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Mois (1-12)</label>
-                                        <h:inputText value="#{payrollBean.mois}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Année</label>
-                                        <h:inputText value="#{payrollBean.annee}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-                                    </div>
-                                </div>
-                                <h:commandButton value="Calculer &amp; Archiver le Salaire" action="#{payrollBean.cloreMois()}" styleClass="w-full mt-10 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-sm cursor-pointer transition" />
-                            </h:form>
-                        </div>
-                    </div>
+                <h:panelGroup id="mainContent" layout="block">
+                    <h:panelGroup layout="block" rendered="#{navigationBean.vueActive == 'dashboard'}">
+                        <ui:include src="/dashboard.xhtml" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" rendered="#{navigationBean.vueActive == 'patients-all'}">
+                        <ui:include src="/patients/all.xhtml" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" rendered="#{navigationBean.vueActive == 'patients-add'}">
+                        <ui:include src="/patients/add.xhtml" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" rendered="#{navigationBean.vueActive == 'patients-edit'}">
+                        <ui:include src="/patients/edit.xhtml" />
+                    </h:panelGroup>
                 </h:panelGroup>
-
-                <h:panelGroup rendered="#{patientBean.vueActive == 'all'}">
-                    <ui:include src="/patients/all.xhtml" />
-                </h:panelGroup>
-
-                <h:panelGroup rendered="#{patientBean.vueActive == 'add'}">
-                    <ui:include src="/patients/add.xhtml" />
-                </h:panelGroup>
-
-                <h:panelGroup rendered="#{patientBean.vueActive == 'edit'}">
-                    <ui:include src="/patients/edit.xhtml" />
-                </h:panelGroup>
-                <ui:include src="#{navigationBean.pageCourante}" />
             </main>
         </div>
     </div>
+    </f:view>
 </h:body>
 </html>

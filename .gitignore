@@ -11,6 +11,7 @@
 *.iml
 .vscode/
 .claude/*
+.gemini/*
 
 # Fichiers système
 .DS_Store

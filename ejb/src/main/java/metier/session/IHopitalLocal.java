@@ -1,7 +1,9 @@
 package metier.session;
 
 import java.util.Date;
+import java.util.List;
 import jakarta.ejb.Local;
+import metier.entities.Patient;
 
 @Local
 public interface IHopitalLocal {
@@ -10,4 +12,10 @@ public interface IHopitalLocal {
     
     // Fonctionnalité 6 : Évaluer et calculer les heures mensuelles avant le Payroll
     void calculerHeuresMensuelles(Long employeCode, int mois, int annee);
+
+    // Gestion des Patients
+    List<Patient> listeTousLesPatients();
+    void ajouterPatient(Patient p);
+    void modifierPatient(Patient p);
+    void supprimerPatient(Long code);
 }

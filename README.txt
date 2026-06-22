@@ -57,3 +57,8 @@ The goal "verify" (which triggers the maven-surefire-plugin) is executed later i
 artifacts ("hsa-ejb.jar" and "hsa-web.war") are already built. You can build
 the final EAR by including those files. The "maven-surefire-plugin" is executed before the JAR/WAR files
 are created, so those JAR/WAR files would have to be built in the "@Deployment" method, too.
+
+
+Aucun clic possible, je ne vois même plus les textes des menus, de même pour le contenu principal, les stats qui nous servent de homepage. Seule warning du     
+    console : cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI:                                 
+    https://tailwindcss.com/docs/installation. URL : http://localhost:8080/hsa-web/index.xhtml             

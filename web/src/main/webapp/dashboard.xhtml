@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://jakarta.faces.html"
+                xmlns:f="http://jakarta.faces.core"
+                xmlns:ui="http://jakarta.faces.facelets">
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-slate-400">Total Lits</p>
+                <h3 class="text-2xl font-bold text-slate-700 mt-1">200</h3>
+            </div>
+            <span class="p-3 bg-blue-50 text-blue-600 rounded-lg material-icons">hotel</span>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-slate-400">Médecins Dispo.</p>
+                <h3 class="text-2xl font-bold text-slate-700 mt-1">126</h3>
+            </div>
+            <span class="p-3 bg-cyan-50 text-cyan-600 rounded-lg material-icons">healing</span>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-slate-400">Fiches Validées</p>
+                <h3 class="text-2xl font-bold text-slate-700 mt-1">3,743</h3>
+            </div>
+            <span class="p-3 bg-emerald-50 text-emerald-600 rounded-lg material-icons">receipt_long</span>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-slate-400">Ambulances</p>
+                <h3 class="text-2xl font-bold text-slate-700 mt-1">36</h3>
+            </div>
+            <span class="p-3 bg-red-50 text-red-600 rounded-lg material-icons">airport_shuttle</span>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-4">
+                <span class="material-icons text-blue-600">schedule</span>
+                <h3 class="text-lg font-bold text-slate-700">Saisie Quotidienne des Temps</h3>
+            </div>
+            <h:form id="payrollSaisieForm" styleClass="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Code Employé / Médecin</label>
+                    <h:inputText value="#{payrollBean.employeCode}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Date de Travail</label>
+                    <h:inputText value="#{payrollBean.dateTravail}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <f:convertDateTime pattern="yyyy-MM-dd" type="date"/>
+                    </h:inputText>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Heure d'Entrée</label>
+                        <h:inputText value="#{payrollBean.heureDebut}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <f:convertDateTime pattern="HH:mm" type="time"/>
+                        </h:inputText>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Heure de Sortie</label>
+                        <h:inputText value="#{payrollBean.heureFin}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <f:convertDateTime pattern="HH:mm" type="time"/>
+                        </h:inputText>
+                    </div>
+                </div>
+                <h:commandButton value="Enregistrer la Journée" action="#{payrollBean.enregistrer()}" styleClass="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-sm cursor-pointer transition" />
+            </h:form>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-4">
+                <span class="material-icons text-emerald-600">monetization_on</span>
+                <h3 class="text-lg font-bold text-slate-700">Clôture Mensuelle (Payroll)</h3>
+            </div>
+            <h:form id="payrollClotureForm" styleClass="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Code de l'Employé</label>
+                    <h:inputText value="#{payrollBean.empCodeCalcul}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Mois (1-12)</label>
+                        <h:inputText value="#{payrollBean.mois}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Année</label>
+                        <h:inputText value="#{payrollBean.annee}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    </div>
+                </div>
+                <h:commandButton value="Calculer &amp; Archiver le Salaire" action="#{payrollBean.cloreMois()}" styleClass="w-full mt-10 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-sm cursor-pointer transition" />
+            </h:form>
+        </div>
+    </div>
+</ui:composition>

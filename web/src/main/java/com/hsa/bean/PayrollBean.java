@@ -1,14 +1,14 @@
 package com.hsa.bean;
 
 import jakarta.ejb.EJB;
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.Date;
 import metier.session.IHopitalLocal;
 
 @Named
-@RequestScoped
+@ViewScoped
 public class PayrollBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -28,6 +28,9 @@ public class PayrollBean implements Serializable {
 
     // Méthode d'action pour enregistrer les heures
     public String enregistrer() {
+        if (employeCode == null) {
+            return null;
+        }
         try {
             hopitalEJB.enregistrerHeuresQuotidiennes(employeCode, dateTravail, heureDebut, heureFin);
             // Vous pouvez ajouter un message de succès PrimeFaces ici
@@ -40,6 +43,9 @@ public class PayrollBean implements Serializable {
 
     // Méthode d'action pour clore le mois
     public String cloreMois() {
+        if (empCodeCalcul == null) {
+            return null;
+        }
         try {
             hopitalEJB.calculerHeuresMensuelles(empCodeCalcul, mois, annee);
             return "index?faces-redirect=true";
