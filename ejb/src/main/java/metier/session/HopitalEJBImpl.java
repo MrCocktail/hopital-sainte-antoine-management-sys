@@ -96,6 +96,44 @@ public class HopitalEJBImpl implements IHopitalLocal {
     }
 
     @Override
+public List<Employe> listeTousLesEmployes() {
+    // On sélectionne les employés dont le TYPE est strictement l'entité Employe (et non pas Medecin)
+    return em.createQuery("SELECT e FROM Employe e WHERE TYPE(e) = Employe", Employe.class)
+             .getResultList();
+}
+
+@Override
+public List<Employe> rechercheEmployes(String query) {
+    if (query == null || query.trim().isEmpty()) {
+        return listeTousLesEmployes();
+    }
+    // On applique le filtre de TYPE combiné avec la recherche par nom/prénom
+    return em.createQuery(
+        "SELECT e FROM Employe e WHERE TYPE(e) = Employe AND (LOWER(e.nom) LIKE LOWER(:query) OR LOWER(e.prenom) LIKE LOWER(:query))", 
+        Employe.class)
+        .setParameter("query", "%" + query + "%")
+        .getResultList();
+}
+
+@Override
+public void ajouterEmploye(Employe e) {
+    em.persist(e);
+}
+
+@Override
+public void modifierEmploye(Employe e) {
+    em.merge(e);
+}
+
+@Override
+public void supprimerEmploye(Long code) {
+    Employe e = em.find(Employe.class, code);
+    if (e != null) {
+        em.remove(e);
+    }
+}
+
+    @Override
     public void enregistrerHeuresQuotidiennes(Long employeCode, Date date, Date debut, Date fin) {
         Employe emp = em.find(Employe.class, employeCode);
         if (emp != null) {

@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.ejb.Local;
 import metier.entities.Patient;
 import metier.entities.Medecin;
+import metier.entities.Employe; 
 
 @Local
 public interface IHopitalLocal {
@@ -27,4 +28,11 @@ public interface IHopitalLocal {
     void ajouterMedecin(Medecin m);
     void modifierMedecin(Medecin m);
     void supprimerMedecin(Long code);
+
+    // Gestion des Employés
+    List<Employe> listeTousLesEmployes();
+    List<Employe> rechercheEmployes(String query);
+    void ajouterEmploye(Employe e);
+    void modifierEmploye(Employe e);
+    void supprimerEmploye(Long code);
 }

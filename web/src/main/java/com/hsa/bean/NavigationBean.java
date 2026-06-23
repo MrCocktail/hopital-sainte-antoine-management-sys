@@ -60,7 +60,12 @@ public class NavigationBean implements Serializable {
                 return "/medecins/add.xhtml";
             case "medecins-edit":
                 return "/medecins/edit.xhtml";
-            case "employees":
+            case "employees-all":
+                return "/employees/all.xhtml";
+            case "employees-add":
+                return "/employees/add.xhtml";
+            case "employees-edit":
+                return "/employees/edit.xhtml";
             case "payroll":
                 return null;
             default:
