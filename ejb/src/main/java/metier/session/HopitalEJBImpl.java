@@ -134,15 +134,34 @@ public void supprimerEmploye(Long code) {
 }
 
     @Override
-    public void enregistrerHeuresQuotidiennes(Long employeCode, Date date, Date debut, Date fin) {
-        Employe emp = em.find(Employe.class, employeCode);
-        if (emp != null) {
-            HeureFournies hf = new HeureFournies(emp, date, debut, fin);
-            em.persist(hf);
-        } else {
-            throw new IllegalArgumentException("Aucun employé trouvé avec le code : " + employeCode);
-        }
+public void enregistrerHeuresQuotidiennes(Long employeCode, Date date, Date debut, Date fin) {
+    // 1. Validation de la chronologie
+    if (debut == null || fin == null || debut.after(fin)) {
+        throw new IllegalArgumentException("L'heure de début doit être antérieure à l'heure de fin.");
     }
+
+    // 2. Récupération de l'employe (ou médecin par polymorphisme)
+    Employe emp = em.find(Employe.class, employeCode);
+    if (emp == null) {
+        throw new IllegalArgumentException("Aucun employé ou médecin trouvé pour le code : " + employeCode);
+    }
+
+    // 3. Règle d'unicité / Anti-chevauchement (Optionnel mais recommandé)
+    TypedQuery<Long> checkQuery = em.createQuery(
+        "SELECT COUNT(hf) FROM HeureFournies hf WHERE hf.employe.employeCode = :code AND hf.date = :date_t", 
+        Long.class);
+    checkQuery.setParameter("code", employeCode);
+    checkQuery.setParameter("date_t", date);
+    
+    Long count = checkQuery.getSingleResult();
+    if (count > 0) {
+        throw new IllegalStateException("Une fiche de temps existe déjà pour ce médecin à cette date.");
+    }
+
+    // 4. Instanciation et Persistance immuable
+    HeureFournies hf = new HeureFournies(emp, date, debut, fin);
+    em.persist(hf);
+}
 
     @Override
     public void calculerHeuresMensuelles(Long employeCode, int mois, int annee) {
@@ -212,4 +231,13 @@ public void supprimerEmploye(Long code) {
         HeureMensuelle hm = new HeureMensuelle(emp, mois, annee, totalHeuresCumulees, salaireBrutGlobal);
         em.persist(hm);
     }
+
+    @Override
+public boolean estUnJourFerie(Date date) {
+    if (date == null) return false;
+    TypedQuery<Long> query = em.createQuery(
+        "SELECT COUNT(jf) FROM JourFerie jf WHERE jf.date = :dateSaisie", Long.class);
+    query.setParameter("dateSaisie", date);
+    return query.getSingleResult() > 0;
+}
 }

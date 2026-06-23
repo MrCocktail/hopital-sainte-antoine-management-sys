@@ -11,6 +11,7 @@ import metier.entities.Employe;
 public interface IHopitalLocal {
     // Fonctionnalité 4 : Saisie journalière des heures d'un employé/médecin via son code Long
     void enregistrerHeuresQuotidiennes(Long employeCode, Date date, Date debut, Date fin);
+    boolean estUnJourFerie(Date date);
     
     // Fonctionnalité 6 : Évaluer et calculer les heures mensuelles avant le Payroll
     void calculerHeuresMensuelles(Long employeCode, int mois, int annee);

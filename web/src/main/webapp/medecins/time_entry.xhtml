@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden max-w-xl mx-auto">
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 text-center relative">
+            <span class="material-icons text-3xl opacity-80 mb-1">more_time</span>
+            <h2 class="text-xl font-bold tracking-wide uppercase">Saisie des heures de présence</h2>
+            <p class="text-blue-100 text-xs mt-1">
+                Praticien : <span class="font-bold text-white">Dr. #{timeTrackingBean.medecinSelectionne.prenom} #{timeTrackingBean.medecinSelectionne.nom}</span>
+            </p>
+        </div>
+
+        <h:form id="timeSaisieForm" styleClass="p-6 space-y-5">
+            
+            <h:panelGroup rendered="#{not empty timeTrackingBean.messageErreur}" 
+                          styleClass="p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg text-xs text-red-700 font-medium block">
+                <div class="flex items-center gap-2">
+                    <span class="material-icons text-sm">error</span>
+                    <span>#{timeTrackingBean.messageErreur}</span>
+                </div>
+            </h:panelGroup>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Date du jour de garde / travail</label>
+                <h:inputText id="datePicker" 
+                             value="#{timeTrackingBean.dateTravail}" 
+                             type="date"
+                             styleClass="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 #{timeTrackingBean.estJourFerieSelectionne ? 'focus:ring-red-500 border-red-300' : 'focus:ring-blue-500'} transition">
+                    <f:convertDateTime pattern="yyyy-MM-dd" type="date" timeZone="GMT"/>
+                    <f:ajax event="change" listener="#{timeTrackingBean.verifierDateFerie()}" render="timeSaisieForm" />
+                </h:inputText>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Heure d'Entrée (Début)</label>
+                    <h:inputText value="#{timeTrackingBean.heureDebut}" 
+                                 type="time"
+                                 styleClass="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <f:convertDateTime pattern="HH:mm" type="time"/>
+                    </h:inputText>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Heure de Sortie (Fin)</label>
+                    <h:inputText value="#{timeTrackingBean.heureFin}" 
+                                 type="time"
+                                 styleClass="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <f:convertDateTime pattern="HH:mm" type="time"/>
+                    </h:inputText>
+                </div>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <h:commandButton value="Valider la journée" 
+                                 action="#{timeTrackingBean.soumettreHeures()}" 
+                                 disabled="#{timeTrackingBean.estJourFerieSelectionne}"
+                                 styleClass="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg shadow-sm transition cursor-pointer disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed" />
+                <h:commandButton value="Annuler" 
+                                 action="#{navigationBean.changerVue('medecins-all')}" 
+                                 immediate="true" 
+                                 styleClass="px-5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-2.5 rounded-lg transition cursor-pointer" />
+            </div>
+        </h:form>
+    </div>
+</ui:composition>

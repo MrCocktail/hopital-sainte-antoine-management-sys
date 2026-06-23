@@ -43,9 +43,9 @@
 
             <h:form id="navForm" style="margin:0; padding:0;" styleClass="flex-1 flex flex-col">
                 <!-- The Command Button -->
-            <h:commandButton value="Submit Data" 
+            <!-- <h:commandButton value="Submit Data" 
                              action="#{userBean.submitAction}" 
-                             styleClass="btn-primary" />
+                             styleClass="btn-primary" /> -->
 
                 <div class="flex-1 p-4 flex flex-col gap-2">
                     <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 mb-1">Menu</p>
@@ -137,6 +137,9 @@
                     </h:panelGroup>
                     <h:panelGroup layout="block" rendered="#{navigationBean.vueActive == 'medecins-edit'}">
                         <ui:include src="/medecins/edit.xhtml" />
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{navigationBean.vueActive == 'medecins-time'}">
+                        <ui:include src="/medecins/time_entry.xhtml" />
                     </h:panelGroup>
                     <h:panelGroup layout="block" rendered="#{navigationBean.vueActive == 'employees-all'}">
                         <ui:include src="/employes/all.xhtml" />
