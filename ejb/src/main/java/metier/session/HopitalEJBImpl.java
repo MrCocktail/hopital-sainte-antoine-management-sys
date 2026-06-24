@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
+import java.util.Calendar;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -164,73 +165,117 @@ public void enregistrerHeuresQuotidiennes(Long employeCode, Date date, Date debu
 }
 
     @Override
-    public void calculerHeuresMensuelles(Long employeCode, int mois, int annee) {
-        // 1. Récupérer l'employé
-        Employe emp = em.find(Employe.class, employeCode);
-        if (emp == null) {
-            throw new IllegalArgumentException("Aucun employé trouvé avec le code : " + employeCode);
+public double obtenirHeuresMedecinParMois(Long employeCode, int mois, int annee) {
+    // Extraction des heures saisies pour le médecin sur la période
+    TypedQuery<HeureFournies> query = em.createQuery(
+        "SELECT hf FROM HeureFournies hf WHERE hf.employe.employeCode = :code " +
+        "AND FUNCTION('MONTH', hf.date) = :m AND FUNCTION('YEAR', hf.date) = :a", 
+        HeureFournies.class
+    );
+    query.setParameter("code", employeCode);
+    query.setParameter("m", mois);
+    query.setParameter("a", annee);
+    List<HeureFournies> fiches = query.getResultList();
+
+    double total = 0.0;
+    for (HeureFournies hf : fiches) {
+        // Utilisation sécurisée de Calendar à la place de .toInstant()
+        java.util.Calendar calDebut = java.util.Calendar.getInstance();
+        calDebut.setTime(hf.getHeureDebut());
+
+        java.util.Calendar calFin = java.util.Calendar.getInstance();
+        calFin.setTime(hf.getHeureFin());
+
+        long minDebut = calDebut.get(java.util.Calendar.HOUR_OF_DAY) * 60 + calDebut.get(java.util.Calendar.MINUTE);
+        long minFin = calFin.get(java.util.Calendar.HOUR_OF_DAY) * 60 + calFin.get(java.util.Calendar.MINUTE);
+
+        long minutesTravaillees = minFin - minDebut;
+        if (minutesTravaillees < 0) {
+            minutesTravaillees += 24 * 60; // Gestion du passage au lendemain
         }
 
-        // 2. Récupérer toutes les présences de l'employé pour le mois et l'année spécifiés
-        TypedQuery<HeureFournies> queryHeures = em.createQuery(
-            "SELECT h FROM HeureFournies h WHERE h.employe.employeCode = :empCode " +
-            "AND FUNCTION('MONTH', h.date) = :mois " +
-            "AND FUNCTION('YEAR', h.date) = :annee", 
-            HeureFournies.class
-        );
-        queryHeures.setParameter("empCode", employeCode);
-        queryHeures.setParameter("mois", mois);
-        queryHeures.setParameter("annee", annee);
-        List<HeureFournies> listeHeures = queryHeures.getResultList();
-
-        // 3. Récupérer les dates des jours fériés pour ce mois et cette année
-        TypedQuery<Date> queryFeries = em.createQuery(
-            "SELECT j.date FROM JourFerie j WHERE FUNCTION('MONTH', j.date) = :mois " +
-            "AND FUNCTION('YEAR', j.date) = :annee", 
-            Date.class
-        );
-        queryFeries.setParameter("mois", mois);
-        queryFeries.setParameter("annee", annee);
-        List<Date> listeDatesFeries = queryFeries.getResultList();
-
-        double totalHeuresCumulees = 0.0;
-        double salaireBrutGlobal = 0.0;
-        double salaireHoraireBase = emp.getSalaireBase();
-
-        // 4. Boucle de calcul algorithmique
-        for (HeureFournies hf : listeHeures) {
-            // Conversion java.util.Date -> java.time.LocalTime pour un calcul propre
-            LocalTime tDebut = hf.getHeureDebut().toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
-            LocalTime tFin = hf.getHeureFin().toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
-
-            // Soustraction brute du temps passé (en minutes)
-            long minutesTravaillees = ChronoUnit.MINUTES.between(tDebut, tFin);
-            double heuresDuJour = minutesTravaillees / 60.0;
-
-            // Cumuler les heures réelles de présence
-            totalHeuresCumulees += heuresDuJour;
-
-            // Vérification si la date travaillée était un jour férié
-            boolean estFerie = false;
-            for (Date dateFerie : listeDatesFeries) {
-                if (hf.getDate().compareTo(dateFerie) == 0) {
-                    estFerie = true;
-                    break;
-                }
-            }
-
-            // Application de la règle de paie (Taux normal vs Taux Double)
-            if (estFerie) {
-                salaireBrutGlobal += heuresDuJour * (salaireHoraireBase * 2.0);
-            } else {
-                salaireBrutGlobal += heuresDuJour * salaireHoraireBase;
-            }
-        }
-
-        // 5. Archivage immuable dans HeureMensuelle (Fiche de Paie)
-        HeureMensuelle hm = new HeureMensuelle(emp, mois, annee, totalHeuresCumulees, salaireBrutGlobal);
-        em.persist(hm);
+        total += minutesTravaillees / 60.0;
     }
+    return total;
+}
+
+@Override
+public void calculerHeuresMensuelles(Long employeCode, int mois, int annee) {
+    // 1. Récupérer l'employé
+    Employe emp = em.find(Employe.class, employeCode);
+    if (emp == null) {
+        throw new IllegalArgumentException("Aucun employé trouvé avec le code : " + employeCode);
+    }
+
+    // 2. Récupérer toutes les présences de l'employé pour le mois et l'année spécifiés
+    TypedQuery<HeureFournies> queryHeures = em.createQuery(
+        "SELECT h FROM HeureFournies h WHERE h.employe.employeCode = :empCode " +
+        "AND FUNCTION('MONTH', h.date) = :mois " +
+        "AND FUNCTION('YEAR', h.date) = :annee", 
+        HeureFournies.class
+    );
+    queryHeures.setParameter("empCode", employeCode);
+    queryHeures.setParameter("mois", mois);
+    queryHeures.setParameter("annee", annee);
+    List<HeureFournies> listeHeures = queryHeures.getResultList();
+
+    // 3. Récupérer les dates des jours fériés pour ce mois et cette année
+    TypedQuery<Date> queryFeries = em.createQuery(
+        "SELECT j.date FROM JourFerie j WHERE FUNCTION('MONTH', j.date) = :mois " +
+        "AND FUNCTION('YEAR', j.date) = :annee", 
+        Date.class
+    );
+    queryFeries.setParameter("mois", mois);
+    queryFeries.setParameter("annee", annee);
+    List<Date> listeDatesFeries = queryFeries.getResultList();
+
+    double totalHeuresCumulees = 0.0;
+    double salaireBrutGlobal = 0.0;
+    double salaireHoraireBase = emp.getSalaireBase();
+
+    // 4. Boucle de calcul algorithmique
+    for (HeureFournies hf : listeHeures) {
+        // Utilisation sécurisée de Calendar à la place de .toInstant()
+        java.util.Calendar calDebut = java.util.Calendar.getInstance();
+        calDebut.setTime(hf.getHeureDebut());
+
+        java.util.Calendar calFin = java.util.Calendar.getInstance();
+        calFin.setTime(hf.getHeureFin());
+
+        long minDebut = calDebut.get(java.util.Calendar.HOUR_OF_DAY) * 60 + calDebut.get(java.util.Calendar.MINUTE);
+        long minFin = calFin.get(java.util.Calendar.HOUR_OF_DAY) * 60 + calFin.get(java.util.Calendar.MINUTE);
+
+        long minutesTravaillees = minFin - minDebut;
+        if (minutesTravaillees < 0) {
+            minutesTravaillees += 24 * 60; // Gestion du passage au lendemain
+        }
+
+        double heuresDuJour = minutesTravaillees / 60.0;
+
+        // Cumuler les heures réelles de présence
+        totalHeuresCumulees += heuresDuJour;
+
+        // Vérification si la date travaillée était un jour férié
+        boolean estFerie = false;
+        for (Date dateFerie : listeDatesFeries) {
+            if (hf.getDate().compareTo(dateFerie) == 0) {
+                estFerie = true;
+                break;
+            }
+        }
+
+        // Application de la règle de paie (Taux normal vs Taux Double)
+        if (estFerie) {
+            salaireBrutGlobal += heuresDuJour * (salaireHoraireBase * 2.0);
+        } else {
+            salaireBrutGlobal += heuresDuJour * salaireHoraireBase;
+        }
+    }
+
+    // 5. Archivage immuable dans HeureMensuelle (Fiche de Paie)
+    HeureMensuelle hm = new HeureMensuelle(emp, mois, annee, totalHeuresCumulees, salaireBrutGlobal);
+    em.persist(hm);
+}
 
     @Override
 public boolean estUnJourFerie(Date date) {
@@ -239,5 +284,89 @@ public boolean estUnJourFerie(Date date) {
         "SELECT COUNT(jf) FROM JourFerie jf WHERE jf.date = :dateSaisie", Long.class);
     query.setParameter("dateSaisie", date);
     return query.getSingleResult() > 0;
+}
+
+@Override
+public boolean estPayrollValide(Long employeCode, int mois, int annee) {
+    TypedQuery<Long> query = em.createQuery(
+        "SELECT COUNT(hm) FROM HeureMensuelle hm WHERE hm.employe.employeCode = :code AND hm.mois = :m AND hm.annee = :a", 
+        Long.class
+    );
+    query.setParameter("code", employeCode);
+    query.setParameter("m", mois);
+    query.setParameter("a", annee);
+    return query.getSingleResult() > 0;
+}
+
+
+
+@Override
+public double calculerSalaireBrutSimule(Long employeCode, int mois, int annee) {
+    Employe emp = em.find(Employe.class, employeCode);
+    if (emp == null) return 0.0;
+
+    if (emp instanceof Medecin) {
+        TypedQuery<HeureFournies> query = em.createQuery(
+            "SELECT hf FROM HeureFournies hf WHERE hf.employe.employeCode = :code " +
+            "AND FUNCTION('MONTH', hf.date) = :m AND FUNCTION('YEAR', hf.date) = :a", 
+            HeureFournies.class
+        );
+        query.setParameter("code", employeCode);
+        query.setParameter("m", mois);
+        query.setParameter("a", annee);
+        List<HeureFournies> fiches = query.getResultList();
+
+        TypedQuery<Date> ferieQuery = em.createQuery("SELECT jf.date FROM JourFerie jf", Date.class);
+        List<Date> feries = ferieQuery.getResultList();
+
+        double salaireSimule = 0.0;
+        double tarifHoraire = emp.getSalaireBase();
+
+        for (HeureFournies hf : fiches) {
+            // Utilisation sécurisée de Calendar pour java.sql.Time
+            java.util.Calendar calDebut = java.util.Calendar.getInstance();
+            calDebut.setTime(hf.getHeureDebut());
+
+            java.util.Calendar calFin = java.util.Calendar.getInstance();
+            calFin.setTime(hf.getHeureFin());
+
+            long minDebut = calDebut.get(java.util.Calendar.HOUR_OF_DAY) * 60 + calDebut.get(java.util.Calendar.MINUTE);
+            long minFin = calFin.get(java.util.Calendar.HOUR_OF_DAY) * 60 + calFin.get(java.util.Calendar.MINUTE);
+
+            long minutesTravaillees = minFin - minDebut;
+            if (minutesTravaillees < 0) {
+                minutesTravaillees += 24 * 60;
+            }
+
+            double heuresDuJour = minutesTravaillees / 60.0;
+
+            boolean estFerie = false;
+            for (Date d : feries) {
+                if (hf.getDate().compareTo(d) == 0) {
+                    estFerie = true;
+                    break;
+                }
+            }
+
+            if (estFerie) {
+                salaireSimule += heuresDuJour * (tarifHoraire * 2.0);
+            } else {
+                salaireSimule += heuresDuJour * tarifHoraire;
+            }
+        }
+        return salaireSimule;
+
+    } else {
+        return emp.getSalaireBase();
+    }
+}
+
+@Override
+public long compterFichesPaieValidees(int mois, int annee) {
+    TypedQuery<Long> query = em.createQuery(
+        "SELECT COUNT(hm) FROM HeureMensuelle hm WHERE hm.mois = :m AND hm.annee = :a", Long.class);
+    query.setParameter("m", mois);
+    query.setParameter("a", annee);
+    return query.getSingleResult();
 }
 }

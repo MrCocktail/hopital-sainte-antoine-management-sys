@@ -1,96 +1,138 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://jakarta.faces.html"
-                xmlns:f="http://jakarta.faces.core"
-                xmlns:ui="http://jakarta.faces.facelets">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+    <div class="space-y-8">
+        
+        <div class="flex justify-between items-center bg-gradient-to-r from-slate-800 to-slate-900 p-6 rounded-2xl shadow-sm text-white">
             <div>
-                <p class="text-sm font-medium text-slate-400">Total Lits</p>
-                <h3 class="text-2xl font-bold text-slate-700 mt-1">200</h3>
+                <h1 class="text-xl font-black tracking-wide uppercase">Tableau de Bord Hospitalier</h1>
+                <p class="text-xs text-slate-400 mt-0.5">Vue globale des effectifs, des patients et du suivi de la facturation HSA.</p>
             </div>
-            <span class="p-3 bg-blue-50 text-blue-600 rounded-lg material-icons">hotel</span>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
-            <div>
-                <p class="text-sm font-medium text-slate-400">Médecins Dispo.</p>
-                <h3 class="text-2xl font-bold text-slate-700 mt-1">126</h3>
+            <div class="hidden sm:flex items-center gap-2 bg-slate-700/50 px-4 py-2 rounded-xl border border-slate-600 text-xs font-semibold">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                Système Connecté
             </div>
-            <span class="p-3 bg-cyan-50 text-cyan-600 rounded-lg material-icons">healing</span>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
-            <div>
-                <p class="text-sm font-medium text-slate-400">Fiches Validées</p>
-                <h3 class="text-2xl font-bold text-slate-700 mt-1">3,743</h3>
-            </div>
-            <span class="p-3 bg-emerald-50 text-emerald-600 rounded-lg material-icons">receipt_long</span>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
-            <div>
-                <p class="text-sm font-medium text-slate-400">Ambulances</p>
-                <h3 class="text-2xl font-bold text-slate-700 mt-1">36</h3>
-            </div>
-            <span class="p-3 bg-red-50 text-red-600 rounded-lg material-icons">airport_shuttle</span>
-        </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-            <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-4">
-                <span class="material-icons text-blue-600">schedule</span>
-                <h3 class="text-lg font-bold text-slate-700">Saisie Quotidienne des Temps</h3>
-            </div>
-            <h:form id="payrollSaisieForm" styleClass="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Code Employé / Médecin</label>
-                    <h:inputText value="#{payrollBean.employeCode}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Date de Travail</label>
-                    <h:inputText value="#{payrollBean.dateTravail}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <f:convertDateTime pattern="yyyy-MM-dd" type="date"/>
-                    </h:inputText>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Heure d'Entrée</label>
-                        <h:inputText value="#{payrollBean.heureDebut}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <f:convertDateTime pattern="HH:mm" type="time"/>
-                        </h:inputText>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Heure de Sortie</label>
-                        <h:inputText value="#{payrollBean.heureFin}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <f:convertDateTime pattern="HH:mm" type="time"/>
-                        </h:inputText>
-                    </div>
-                </div>
-                <h:commandButton value="Enregistrer la Journée" action="#{payrollBean.enregistrer()}" styleClass="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-sm cursor-pointer transition" />
-            </h:form>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-            <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-4">
-                <span class="material-icons text-emerald-600">monetization_on</span>
-                <h3 class="text-lg font-bold text-slate-700">Clôture Mensuelle (Payroll)</h3>
-            </div>
-            <h:form id="payrollClotureForm" styleClass="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-blue-500 transition-all duration-300 group flex items-center justify-between">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Code de l'Employé</label>
-                    <h:inputText value="#{payrollBean.empCodeCalcul}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Médecins Praticiens</p>
+                    <h3 class="text-3xl font-black text-slate-800 mt-1">#{dashboardBean.totalMedecins}</h3>
+                    <span class="text-[10px] font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md mt-2 inline-block">Agents actifs</span>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Mois (1-12)</label>
-                        <h:inputText value="#{payrollBean.mois}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                <span class="p-4 bg-blue-50 text-blue-600 rounded-xl material-icons text-3xl group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">healing</span>
+            </div>
+            
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-purple-500 transition-all duration-300 group flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Patients Enregistrés</p>
+                    <h3 class="text-3xl font-black text-slate-800 mt-1">#{dashboardBean.totalPatients}</h3>
+                    <span class="text-[10px] font-medium text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md mt-2 inline-block">Dossiers Médicaux</span>
+                </div>
+                <span class="p-4 bg-purple-50 text-purple-600 rounded-xl material-icons text-3xl group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300">accessible</span>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-emerald-500 transition-all duration-300 group flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Fiches Validées</p>
+                    <h3 class="text-3xl font-black text-slate-800 mt-1">#{dashboardBean.fichesValideesCeMois}</h3>
+                    <span class="text-[10px] font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md mt-2 inline-block">Mois en cours</span>
+                </div>
+                <span class="p-4 bg-emerald-50 text-emerald-600 rounded-xl material-icons text-3xl group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">receipt_long</span>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-amber-500 transition-all duration-300 group flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Lits &amp; Logistique</p>
+                    <h3 class="text-3xl font-black text-slate-800 mt-1">#{dashboardBean.totalLits}</h3>
+                    <span class="text-[10px] font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md mt-2 inline-block">#{dashboardBean.ambulancesDispo} Ambulances opérationnelles</span>
+                </div>
+                <span class="p-4 bg-amber-50 text-amber-600 rounded-xl material-icons text-3xl group-hover:bg-amber-600 group-hover:text-white transition-colors duration-300">hotel</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm lg:col-span-2 space-y-4">
+                <div class="border-b border-slate-100 pb-3">
+                    <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wide flex items-center gap-2">
+                        <span class="material-icons text-blue-500 text-sm">rocket_launch</span> Raccourcis d'actions administratives
+                    </h3>
+                    <p class="text-xs text-slate-400">Accédez directement aux modules métiers prioritaires.</p>
+                </div>
+
+                <h:form id="quickNavForm" styleClass="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                    <h:commandLink action="#{navigationBean.changerVue('medecins-add')}" styleClass="flex items-center gap-3 p-4 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-xl text-left transition group">
+                        <span class="material-icons p-2 bg-white text-blue-600 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition shadow-sm">person_add</span>
+                        <div>
+                            <span class="text-xs font-bold text-slate-700 block">Enregistrer un Médecin</span>
+                            <span class="text-[11px] text-slate-400">Ajouter un nouveau praticien</span>
+                        </div>
+                    </h:commandLink>
+
+                    <h:commandLink action="#{navigationBean.changerVue('payroll')}" styleClass="flex items-center gap-3 p-4 bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-xl text-left transition group">
+                        <span class="material-icons p-2 bg-white text-emerald-600 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition shadow-sm">account_balance_wallet</span>
+                        <div>
+                            <span class="text-xs font-bold text-slate-700 block">Gestion Payroll</span>
+                            <span class="text-[11px] text-slate-400">Sceller et archiver les bulletins</span>
+                        </div>
+                    </h:commandLink>
+
+                    <h:commandLink action="#{navigationBean.changerVue('employees-add')}" styleClass="flex items-center gap-3 p-4 bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-300 rounded-xl text-left transition group">
+                        <span class="material-icons p-2 bg-white text-amber-600 rounded-lg group-hover:bg-amber-600 group-hover:text-white transition shadow-sm">badge</span>
+                        <div>
+                            <span class="text-xs font-bold text-slate-700 block">Recruter un Personnel</span>
+                            <span class="text-[11px] text-slate-400">Créer un profil staff standard</span>
+                        </div>
+                    </h:commandLink>
+
+                    <h:commandLink action="#{navigationBean.changerVue('medecins-all')}" styleClass="flex items-center gap-3 p-4 bg-slate-50 hover:bg-purple-50 border border-slate-200 hover:border-purple-300 rounded-xl text-left transition group">
+                        <span class="material-icons p-2 bg-white text-purple-600 rounded-lg group-hover:bg-purple-600 group-hover:text-white transition shadow-sm">date_range</span>
+                        <div>
+                            <span class="text-xs font-bold text-slate-700 block">Pointages Horaires</span>
+                            <span class="text-[11px] text-slate-400">Saisir les présences de garde</span>
+                        </div>
+                    </h:commandLink>
+                </h:form>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div class="border-b border-slate-100 pb-3">
+                    <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wide flex items-center gap-2">
+                        <span class="material-icons text-purple-500 text-sm">analytics</span> Répartition RH
+                    </h3>
+                    <p class="text-xs text-slate-400">Distribution du personnel HSA.</p>
+                </div>
+
+                <div class="py-4 space-y-4 flex-grow flex flex-col justify-center">
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-xs font-bold text-slate-600">
+                            <span>Praticiens (Corps Médical)</span>
+                            <span>#{dashboardBean.totalMedecins}</span>
+                        </div>
+                        <progress value="#{dashboardBean.pourcentageMedecins}" max="100" 
+              class="w-full h-2 rounded-full overflow-hidden [&amp;::-webkit-progress-bar]:bg-slate-100 [&amp;::-webkit-progress-value]:bg-blue-500 [&amp;::-moz-progress-bar]:bg-blue-500 shadow-sm"></progress>
                     </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Année</label>
-                        <h:inputText value="#{payrollBean.annee}" styleClass="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-xs font-bold text-slate-600">
+                            <span>Personnel Administratif &amp; Standard</span>
+                            <span>#{dashboardBean.totalEmployes}</span>
+                        </div>
+                        <progress value="#{dashboardBean.pourcentageEmployes}" max="100" 
+              class="w-full h-2 rounded-full overflow-hidden [&amp;::-webkit-progress-bar]:bg-slate-100 [&amp;::-webkit-progress-value]:bg-amber-500 [&amp;::-moz-progress-bar]:bg-amber-500 shadow-sm"></progress>
                     </div>
                 </div>
-                <h:commandButton value="Calculer &amp; Archiver le Salaire" action="#{payrollBean.cloreMois()}" styleClass="w-full mt-10 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-sm cursor-pointer transition" />
-            </h:form>
+
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-150 text-[11px] text-slate-500 flex items-center gap-2">
+                    <span class="material-icons text-slate-400 text-sm">info</span>
+                    Le ratio influe sur le volume horaire simulant le budget mensuel global.
+                </div>
+            </div>
         </div>
     </div>
 </ui:composition>

@@ -16,6 +16,17 @@ public interface IHopitalLocal {
     // Fonctionnalité 6 : Évaluer et calculer les heures mensuelles avant le Payroll
     void calculerHeuresMensuelles(Long employeCode, int mois, int annee);
 
+    // Vérifier si la paie a déjà été validée/scellée pour ce mois
+boolean estPayrollValide(Long employeCode, int mois, int annee);
+
+// Simuler le cumul des heures d'un médecin pour un mois donné (calcul en mémoire)
+double obtenirHeuresMedecinParMois(Long employeCode, int mois, int annee);
+
+// Calculer le montant brut temporaire en mémoire (Médecin ou Employé Standard)
+double calculerSalaireBrutSimule(Long employeCode, int mois, int annee);
+
+long compterFichesPaieValidees(int mois, int annee);
+
     // Gestion des Patients
     List<Patient> listeTousLesPatients();
     List<Patient> recherchePatients(String query);

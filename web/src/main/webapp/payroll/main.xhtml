@@ -1,0 +1,182 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <div class="space-y-6">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
+            <h:form id="payrollFiltersForm" styleClass="flex flex-wrap items-center gap-4 w-full md:w-auto">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Filtre Type</label>
+                    <h:selectOneMenu value="#{payrollBean.filtreType}" styleClass="text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <f:selectItem itemValue="ALL" itemLabel="Tous les employés" />
+                        <f:selectItem itemValue="MEDECIN" itemLabel="Médecins uniquement" />
+                        <f:selectItem itemValue="EMPLOYE" itemLabel="Employés standards" />
+                        <f:ajax event="change" listener="#{payrollBean.rafraichirCarousel()}" render="payrollCarouselForm" />
+                    </h:selectOneMenu>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Mois de Paie</label>
+                    <h:selectOneMenu value="#{payrollBean.moisSelectionne}" styleClass="text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <f:selectItem itemValue="1" itemLabel="Janvier" />
+                        <f:selectItem itemValue="2" itemLabel="Février" />
+                        <f:selectItem itemValue="3" itemLabel="Mars" />
+                        <f:selectItem itemValue="4" itemLabel="Avril" />
+                        <f:selectItem itemValue="5" itemLabel="Mai" />
+                        <f:selectItem itemValue="6" itemLabel="Juin" />
+                        <f:selectItem itemValue="7" itemLabel="Juillet" />
+                        <f:selectItem itemValue="8" itemLabel="Août" />
+                        <f:selectItem itemValue="9" itemLabel="Septembre" />
+                        <f:selectItem itemValue="10" itemLabel="Octobre" />
+                        <f:selectItem itemValue="11" itemLabel="Novembre" />
+                        <f:selectItem itemValue="12" itemLabel="Décembre" />
+                        <f:ajax event="change" listener="#{payrollBean.rafraichirCarousel()}" render="payrollCarouselForm" />
+                    </h:selectOneMenu>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Année</label>
+                    <h:selectOneMenu value="#{payrollBean.anneeSelectionne}" styleClass="text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <f:selectItem itemValue="2025" itemLabel="2025" />
+                        <f:selectItem itemValue="2026" itemLabel="2026" />
+                        <f:selectItem itemValue="2027" itemLabel="2027" />
+                        <f:ajax event="change" listener="#{payrollBean.rafraichirCarousel()}" render="payrollCarouselForm" />
+                    </h:selectOneMenu>
+                </div>
+
+                <div class="relative min-w-[220px]">
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Rechercher un agent</label>
+                    <h:inputText value="#{payrollBean.searchTerm}" styleClass="w-full text-sm bg-slate-50 border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <f:ajax event="keyup" listener="#{payrollBean.rafraichirCarousel()}" render="payrollCarouselForm" />
+                    </h:inputText>
+                    <span class="material-icons absolute right-2.5 bottom-2 text-slate-400 text-sm">search</span>
+                </div>
+            </h:form>
+            
+            <div class="text-right hidden md:block">
+                <span class="text-xs font-semibold text-slate-400 block uppercase">Espace de Validation</span>
+                <span class="text-sm font-bold text-slate-700">HSA Payroll Sytem v1.0</span>
+            </div>
+        </div>
+
+        <h:form id="payrollCarouselForm">
+            
+            <h:panelGroup rendered="#{not empty payrollBean.messageSucces}" styleClass="max-w-2xl mx-auto mb-4 p-4 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-lg text-xs text-emerald-700 font-medium block">
+                <div class="flex items-center gap-2">
+                    <span class="material-icons text-sm">check_circle</span>
+                    <span>#{payrollBean.messageSucces}</span>
+                </div>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{not empty payrollBean.messageErreur}" styleClass="max-w-2xl mx-auto mb-4 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg text-xs text-red-700 font-medium block">
+                <div class="flex items-center gap-2">
+                    <span class="material-icons text-sm">error</span>
+                    <span>#{payrollBean.messageErreur}</span>
+                </div>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{empty payrollBean.listeCarousel}" styleClass="bg-white rounded-xl border border-slate-200 p-12 text-center max-w-2xl mx-auto block shadow-sm">
+                <span class="material-icons text-4xl text-slate-300 mb-2">person_search</span>
+                <p class="text-sm font-medium text-slate-500">Aucune fiche de paie ne correspond aux critères de filtrage actuels.</p>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{not empty payrollBean.listeCarousel}" styleClass="block relative max-w-2xl mx-auto">
+                
+                <div class="text-center mb-2">
+                    <span class="text-xs font-bold px-3 py-1 bg-slate-200 text-slate-600 rounded-full tracking-wider uppercase">
+                        Fiche #{payrollBean.indexCourant + 1} sur #{payrollBean.listeCarousel.size()}
+                    </span>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden relative">
+                    
+                    <div class="bg-slate-900 text-white p-6 border-b-4 border-blue-600">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-lg font-black tracking-wider uppercase">HÔPITAL SAINTE-ANTOINE</h3>
+                                <p class="text-[11px] text-slate-400 uppercase tracking-widest">Service de Gestion des Rémunérations</p>
+                            </div>
+                            <div class="bg-blue-600 text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-wider">
+                                Période : #{payrollBean.moisSelectionne} / #{payrollBean.anneeSelectionne}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 space-y-6">
+                        <div class="bg-slate-50 rounded-xl p-4 border border-slate-150 grid grid-cols-2 gap-4">
+                            <div>
+                                <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-wider">Nom &amp; Prénom de l'Agent</span>
+                                <span class="text-sm font-bold text-slate-800">#{payrollBean.employeCourant.prenom} #{payrollBean.employeCourant.nom}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-wider">Statut / Rôle</span>
+                                <span class="text-xs font-semibold inline-block px-2.5 py-0.5 rounded-full mt-0.5 #{payrollBean.isMedecin(payrollBean.employeCourant) ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}">
+                                    #{payrollBean.isMedecin(payrollBean.employeCourant) ? 'Médecin Praticien' : 'Personnel Standard'}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-1">Éléments de calcul de la rémunération</h4>
+                            
+                            <div class="flex justify-between items-center text-sm py-1">
+                                <span class="text-slate-600">Volume horaire mensuel :</span>
+                                <h:panelGroup rendered="#{payrollBean.isMedecin(payrollBean.employeCourant)}">
+                                    <span class="font-bold text-slate-800">
+                                        <h:outputText value="#{payrollBean.heuresCumuleesSimulees}"><f:convertNumber pattern="#,##0.0"/></h:outputText> heures réelles
+                                    </span>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{not payrollBean.isMedecin(payrollBean.employeCourant)}">
+                                    <span class="font-medium text-slate-500 italic">Base mensuelle fixe (8h/jour ouvré)</span>
+                                </h:panelGroup>
+                            </div>
+
+                            <div class="flex justify-between items-center text-sm py-1">
+                                <span class="text-slate-600">#{payrollBean.isMedecin(payrollBean.employeCourant) ? 'Tarif horaire de base :' : 'Salaire forfaitaire de référence :'}</span>
+                                <span class="font-bold text-slate-800">
+                                    <h:outputText value="#{payrollBean.employeCourant.salaireBase}"><f:convertNumber type="currency" currencySymbol="$" /></h:outputText>
+                                    #{payrollBean.isMedecin(payrollBean.employeCourant) ? ' / h' : ''}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t-2 border-dashed border-slate-200 flex justify-between items-center">
+                            <div>
+                                <span class="text-xs font-bold text-slate-500 block uppercase tracking-wider">Montant Brut Évalué</span>
+                                <span class="text-2xl font-black text-blue-600">
+                                    <h:outputText value="#{payrollBean.salaireBrutSimule}"><f:convertNumber type="currency" currencySymbol="$" /></h:outputText>
+                                </span>
+                            </div>
+
+                            <div>
+                                <h:panelGroup rendered="#{payrollBean.isFicheDejaValidee()}">
+                                    <span class="flex items-center gap-1 bg-emerald-100 text-emerald-800 border border-emerald-300 px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wider shadow-sm">
+                                        <span class="material-icons text-sm">check_circle</span> Payé &amp; Archivé
+                                    </span>
+                                </h:panelGroup>
+
+                                <h:panelGroup rendered="#{not payrollBean.isFicheDejaValidee()}">
+                                    <h:commandButton value="Valider le paiement" action="#{payrollBean.validerFicheCourante()}" styleClass="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-lg shadow-sm transition cursor-pointer">
+                                        <f:ajax render="payrollCarouselForm" />
+                                    </h:commandButton>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 border-t border-slate-100 flex justify-between items-center">
+                        <h:commandLink action="#{payrollBean.passerPrecedent()}" styleClass="flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-blue-600 transition">
+                            <span class="material-icons text-sm">arrow_back</span> Agent Précédent
+                            <f:ajax render="payrollCarouselForm" />
+                        </h:commandLink>
+                        
+                        <h:commandLink action="#{payrollBean.passerSuivant()}" styleClass="flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-blue-600 transition">
+                            Agent Suivant <span class="material-icons text-sm">arrow_forward</span>
+                            <f:ajax render="payrollCarouselForm" />
+                        </h:commandLink>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+    </div>
+</ui:composition>

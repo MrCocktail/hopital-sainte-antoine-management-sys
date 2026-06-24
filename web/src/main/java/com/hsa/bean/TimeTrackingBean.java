@@ -7,6 +7,7 @@ import metier.entities.Medecin;
 import metier.session.IHopitalLocal;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.TimeZone;
 
 @Named
 @SessionScoped
@@ -75,6 +76,10 @@ public class TimeTrackingBean implements Serializable {
         } catch (Exception ex) {
             messageErreur = ex.getMessage();
         }
+    }
+
+    public String getSystemTimeZone() {
+        return TimeZone.getDefault().getID();
     }
 
     // Getters & Setters

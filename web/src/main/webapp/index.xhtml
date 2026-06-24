@@ -32,6 +32,9 @@
 
 <h:body style="margin:0; padding:0; background-color: #f8fafc;">
     <f:view>
+        <f:metadata>
+            <f:viewAction action="#{payrollBean.onPageLoad()}" />
+        </f:metadata>
     <div class="flex min-h-screen w-full">
 
         <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0 min-h-screen">
@@ -149,6 +152,9 @@
                     </h:panelGroup>
                     <h:panelGroup layout="block" rendered="#{navigationBean.vueActive == 'employees-edit'}">
                         <ui:include src="/employes/edit.xhtml" />
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" rendered="#{navigationBean.vueActive == 'payroll'}">
+                        <ui:include src="/payroll/main.xhtml" />
                     </h:panelGroup>
                 </h:panelGroup>
             </main>
