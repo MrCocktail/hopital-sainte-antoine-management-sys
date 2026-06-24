@@ -1,64 +1,52 @@
-This project was created from the archetype "wildfly-jakartaee-ear-archetype".
+# 🏥 HSA - Hospital Management System (Hôpital Sainte-Antoine)
 
-To deploy it:
-Run the maven goals "install wildfly:deploy"
+HSA est une application d'entreprise moderne et robuste dédiée à la gestion administrative, médicale et financière de l'**Hôpital Sainte-Antoine** situé à Port-au-Prince, Haïti. 
 
-To undeploy it:
-Run the maven goals "wildfly:undeploy"
+Le système est conçu avec une architecture multi-tiers conforme aux spécifications **Jakarta EE** (EJB, JPA, JSF) et s'exécute sur le serveur d'applications **WildFly**. L'interface utilisateur est entièrement propulsée par **Tailwind CSS** et optimisée pour l'administration RH et la comptabilité.
 
-==========================
+---
 
-DataSource:
-This sample includes a "persistence.xml" file in the EJB project. This file defines
-a persistence unit "hsaPersistenceUnit" which uses the JakartaEE default database.
+## 🚀 Fonctionnalités Principales
 
-In production environment, you should define a database in WildFly config and point to this database
-in "persistence.xml".
+### 📊 1. Cockpit & Tableau de Bord (Dashboard)
+* **Indicateurs clés de performance (KPI) dynamiques** connectés à la base de données : nombre de médecins praticiens actifs, patients enregistrés, et fiches de paie validées.
+* **Répartition RH automatique** affichant le ratio en temps réel entre le corps médical et le personnel administratif sous forme de jauges graphiques.
+* **Panneau d'actions rapides** permettant de naviguer instantanément vers les fonctionnalités critiques.
 
-If you don't use entity beans, you can delete "persistence.xml".
-==========================
+### 👥 2. Gestion du Personnel & Rôles
+* **Fiches Employés Standard** : Gestion complète du personnel administratif (salaire forfaitaire mensuel de référence basé sur 8h/jour ouvré).
+* **Fiches Médecins Praticiens** : Suivi spécifique basé sur une tarification horaire contractuelle appliquée aux relevés de présences.
 
-JSF:
-The web application is prepared for JSF 4.0 by bundling an empty "faces-config.xml" in "src/main/webapp/WEB-INF".
-In case you don't want to use JSF, simply delete this file and "src/main/webapp/beans.xml".
-==========================
+### 🕒 3. Suivi du Temps de Garde
+* Module de saisie et de suivi des feuilles de temps (`HeureFournies`) enregistrant les pointages avec heure de début et heure de fin.
+* Algorithme d'extraction sécurisé gérant les passages de gardes de nuit sur le lendemain.
 
-Testing:
-This sample is prepared for running JUnit5 unit tests with the Arquillian framework.
+### 💳 4. Gestion du Payroll & Clôture Mensuelle
+* **Validation par Carousel fluide** : Système de défilement fiche par fiche permettant de simuler, vérifier et sceller les salaires pour une période donnée (Mois/Année).
+* **Calcul automatique des majorations** : Détection des jours fériés (`JourFerie`) avec application d'un taux double de rémunération horaire.
+* **Archivage immuable** : Génération de fiches historiques (`HeureMensuelle`) scellées et protégées contre la suppression des comptes d'employés d'origine.
 
-The configuration can be found in "hsa/pom.xml":
+---
 
-Three profiles are defined:
--"default": no integration tests are executed.
--"arq-remote": you have to start a WildFly server on your machine. The tests are executed by deploying
- the application to this server.
- Here the "maven-failsafe-plugin" is enabled so that integration tests can be run.
- Run maven with these arguments: "clean verify -Parq-remote"
--"arq-managed": this requires the environment variable "JBOSS_HOME" to be set:
- The server found in this path is started and the tests are executed by deploying the application to this server.
- Instead of using this environment variable, you can also define the path in "arquillian.xml".
- Here the "maven-failsafe-plugin" is enabled so that integration tests can be run.
- Run maven with these arguments: "clean verify -Parq-managed"
+## 🛠️ Architecture Technique & Technologies
 
-The Arquillian test runner is configured with the file "src/test/resources/arquillian.xml"
-(duplicated in EJB and WEB project, depending where your tests are placed).
-The profile "arq-remote" uses the container qualifier "remote" in this file.
-The profile "arq-managed" uses the container qualifier "managed" in this file.
+* **Framework de Présentation** : Jakarta Faces (JSF 4.0) avec injection de composants via CDI (`@Named`, `@SessionScoped`, `@RequestScoped`).
+* **Couche Métier (Back-End)** : Enterprise JavaBeans (EJB 4.0 Stateless / Statefull) encapsulant les transactions et la logique de calcul.
+* **Persistance & Données** : JPA 3.1 (Jakarta Persistence Unit `hsaPersistenceUnit`) mappé sur une base de données MySQL via WildFly.
+* **Design UI** : Tailwind CSS (via CDN d'intégration) et Material Icons de Google.
 
+---
 
-Unit tests can be added to EJB project and/or to Web project.
+## 💻 Commandes de Déploiement & Cycle de Vie
 
-The web project contains an integration test "SampleIT" which shows how to create the deployable EAR file using the ShrinkWrap API.
-You can delete this test file if no tests are necessary.
+Le projet utilise Maven pour la gestion des builds et des dépendances à travers sa structure d'EAR (Enterprise Archive).
 
-Why integration tests instead of the "maven-surefire-plugin" testrunner?
-The Arquillian test runner deploys the EAR file to the WildFly server and thus you have to build it yourself with the ShrinkWrap API.
-The goal "verify" (which triggers the maven-surefire-plugin) is executed later in the maven build lifecyle than the "test" goal so that the target
-artifacts ("hsa-ejb.jar" and "hsa-web.war") are already built. You can build
-the final EAR by including those files. The "maven-surefire-plugin" is executed before the JAR/WAR files
-are created, so those JAR/WAR files would have to be built in the "@Deployment" method, too.
+### Prérequis
+1. **Java 17** (ou version supérieure) installé.
+2. **Apache Maven** configuré.
+3. Serveur **WildFly** démarré localement (ou variable d'environnement `JBOSS_HOME` configurée).
 
-
-Aucun clic possible, je ne vois même plus les textes des menus, de même pour le contenu principal, les stats qui nous servent de homepage. Seule warning du     
-    console : cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI:                                 
-    https://tailwindcss.com/docs/installation. URL : http://localhost:8080/hsa-web/index.xhtml             
+### ⚙️ Compilation et Déploiement
+Pour compiler l'intégralité de l'application (`hsa-ejb`, `hsa-web`) et la déployer automatiquement sur le serveur WildFly en cours d'exécution :
+```bash
+mvn clean install wildfly:deploy
